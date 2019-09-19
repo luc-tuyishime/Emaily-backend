@@ -7,7 +7,7 @@
     "npm": "6.11.3"
   },
   "scripts": {
-    "start": "node ./src/bin/www",
+    "start": "@babel/node ./src/bin/www",
     "server": "babel-node ./src/bin/www",
     "dev": "NODE_ENV=development nodemon --exec npm-run-all server"
   },
