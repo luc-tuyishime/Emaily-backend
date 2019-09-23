@@ -1,10 +1,11 @@
 // app.js
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { GoogleClientID, GoogleClientSecret } from '../config/keys';
+import logger from 'morgan';
+import { Authroutes } from './routes/authRoutes';
 
 const app = express();
 app.use(logger('dev'));
@@ -27,14 +28,10 @@ passport.use(
   )
 ); // create a new instance of the new google passport strategy, hey application i want to authenticate my user with google
 
-app.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    // the string ('google') will go and find the strategy upstair
-    scope: ['profile', 'email']
-  })
-);
+Authroutes(app);
 
-app.get('/auth/google/callback', passport.authenticate('google')); // if someone need to authenticate with google use the (GoogleStrategy)
+app.get('/', (req, res, next) => {
+  res.send({ message: 'Welcome to  Emaily app..' });
+});
 
 export default app;
