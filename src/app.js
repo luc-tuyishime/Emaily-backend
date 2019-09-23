@@ -2,14 +2,39 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { GoogleClientID, GoogleClientSecret } from '../config/keys';
+
 const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.get('/', (req, res, next) => {
-  res.send({ message: 'Welcome to the Emaily Feedback...' });
-});
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: GoogleClientID,
+      clientSecret: GoogleClientSecret,
+      callbackURL: '/auth/google/callback'
+    },
+    (accessToken, refreshToken, profile, done) => {
+      console.log('Access token', accessToken);
+      console.log('Refresh Token', refreshToken);
+      console.log('profile', profile);
+    }
+  )
+); // create a new instance of the new google passport strategy, hey application i want to authenticate my user with google
+
+app.get(
+  '/auth/google',
+  passport.authenticate('google', {
+    // the string ('google') will go and find the strategy upstair
+    scope: ['profile', 'email']
+  })
+);
+
+app.get('/auth/google/callback', passport.authenticate('google')); // if someone need to authenticate with google use the (GoogleStrategy)
 
 export default app;
