@@ -10,4 +10,8 @@ export const Authroutes = app => {
   );
 
   app.get('/auth/google/callback', passport.authenticate('google')); // if someone need to authenticate with google use the (GoogleStrategy)
+
+  app.get('/api/current_user', (req, res) => {
+    res.send(req.user);
+  });
 };
