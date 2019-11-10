@@ -14,23 +14,21 @@ passport.use(
       callbackURL: '/auth/google/callback',
       proxy: true // if our program runs into any proxy just do it
     },
-    (accessToken, refreshToken, profile, done) => {
-      User.findOne({ googleId: profile.id }).then(existingUser => {
-        if (existingUser) {
-          // we already have a user with the given profile id
-          done(null, existingUser);
-        } else {
-          // we don't have a new user user record with the given id, make a new record
-          new User({
-            googleId: profile.id,
-            userName: profile.displayName,
-            email: profile.emails,
-            photo: profile.photos
-          })
-            .save()
-            .then(user => done(null, user));
-        }
-      });
+    async (accessToken, refreshToken, profile, done) => {
+      const existingUser = await User.findOne({ googleId: profile.id });
+
+      if (existingUser) {
+        // we already have a user with the given profile id
+        return done(null, existingUser);
+      }
+      // we don't have a new user user record with the given id, make a new record
+      const user = await new User({
+        googleId: profile.id,
+        userName: profile.displayName,
+        email: profile.emails,
+        photo: profile.photos
+      }).save();
+      done(null, user);
     }
   )
 ); // create a new instance of the new google passport strategy, hey application i want to authenticate my user with google
