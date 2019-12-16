@@ -5,7 +5,9 @@ import mongoose from 'mongoose';
 import keys from '../config/keys';
 import passport from 'passport';
 import logger from 'morgan';
+import BodyParser from 'body-parser';
 import { Authroutes } from './routes/authRoutes';
+import billingRoutes from './routes/billingRoutes';
 import './services/passport';
 import './models/User';
 
@@ -15,6 +17,7 @@ mongoose.connect(keys.mongoURI, {
 });
 
 const app = express();
+app.use(BodyParser.json());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,6 +35,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 Authroutes(app);
+billingRoutes(app); // will immediately call with the  express app object
 
 app.get('/', (req, res, next) => {
   res.send({ message: 'Welcome to  Emaily app..' });
