@@ -10,7 +10,7 @@ export const Authroutes = app => {
   );
 
   // after the user come back from the Oauth flow,
-  // passport middleware takes over right and says ok
+  // passport middleware takes over right and says ok,
   //I'm all done and pass it to the next middleware or handler and redirect to surveys
   app.get(
     '/auth/google/callback',
