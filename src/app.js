@@ -37,6 +37,20 @@ app.use(passport.session());
 Authroutes(app);
 billingRoutes(app); // will immediately call with the  express app object
 
+
+// Run if we are in production
+if (process.env.NODE_ENV === 'production') {
+  // Express will serve up production assets
+  // like our main.js, or main.css file!
+  app.use(express.static('client-emaily/build'));
+  // Express will serve up the app.js file
+  // if it doesn't recognize the app
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client-emaily', 'build', 'index.html'));
+  })
+}
+
 app.get('/', (req, res, next) => {
   res.send({ message: 'Welcome to  Emaily app..' });
 });
