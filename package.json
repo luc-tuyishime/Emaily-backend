@@ -12,7 +12,7 @@
     "dev": "NODE_ENV=development nodemon --exec npm-run-all server",
     "client": "npm run start --prefix client-emaily",
     "dev-client": "concurrently \"npm run dev\" \"npm run client\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client-emaily && npm run build --prefix client-emaily"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "dependencies": {
     "@babel/cli": "^7.6.0",
